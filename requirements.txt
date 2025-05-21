@@ -1,0 +1,6 @@
+numpy<2
+pydap==3.5
+xarray
+netCDF4==1.6.2
+earthaccess
+dask[complete]
