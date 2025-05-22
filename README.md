@@ -82,23 +82,62 @@ The code for this is in `../merra_2/download/performance.py`
 4. Add the results of the experiments to the corresponding *plot_name_all.csv* in `iharp3/experiment-kit/round2/results`.
 5. Generate the plots of *Vanilla, TileDB,* and *Polaris* with the additional line for MERRA-2 and Polaris. Code for the plots is in `experiment-kit/round2/figs/code`.
 
-### Experiments
-* Figure 6: Impact of Result Size
-        * Queries: `round2/tests/5a.csv`
-        * Vanilla/TDB/PolarisERA5 results: *5a_all.csv*
-        * Plot code: `experiment-kit/round2/figs/code/5aplot.py`
+### Past experiments
+
+Files in github repository: `experiment-kit/round2`
 
 * Figure 5: Impact of Changing Spatial and Temporal Resolutions
-        * Queries: `round2/tests/5c.csv`
-        * Vanilla/TDB/PolarisERA5 results: *5c_all.csv*
-        * Plot code: `experiment-kit/round2/figs/code/5cplot.py`
+        * Queries: `../tests/5c.csv`
+        * Driver: `driver.py`
+        * Vanilla/TDB/PolarisERA5 results: `../results/5c_all.csv`
+        * Plot code: `../figs/code/5cplot.py`
+
+* Figure 6: Impact of Result Size
+        * Queries: `../tests/5a.csv`
+        * Driver: `driver5a.py`
+        * Vanilla/TDB/PolarisERA5 results: `../results/5a_all.csv`
+        * Plot code: `../figs/code/5aplot.py`
 
 * Figure 8: Find Time Query Performance
-        * Queries: 
-        * Vanilla/TDB/PolarisERA5 results: *greenland.csv*
-        * Plot code: `experiment-kit/round2/figs/code/fvplot.py`
+        * Queries: `../tests/fv_new.csv`
+        * Driver: `driverfv.py`
+        * Vanilla/TDB/PolarisERA5 results: `../results/greenland.csv`
+        * Plot code: `../figs/code/fvplot.py`
 
 * Figure 7: Heatmap Query Performance
-        * Queries: 
+        * Queries: `../tests/hmft.csv`
+        * Driver: `driverhmft.py`
         * Vanilla/TDB/PolarisERA5 results: *heatmap.csv*
-        * Plot code: `experiment-kit/round2/figs/code/hmplot.py`
+        * Plot code: `../figs/code/hmplot.py`
+
+### Current experiments
+- For queries: change time ranges, region must be within Greenland.
+- For driver: copy driver for MERRA-2 data, add file copying to mimic cold start.
+- For results: concatenate MERRA-2 results with previous results.
+- For plots: add MERRA-2 line, aggregate ERA5 and MERRA-2 line 
+
+Files in github repository: `merra_2/experiments`
+
+* Figure 5: Impact of Changing Spatial and Temporal Resolutions
+        * Queries: `../queries/changing_resolutions.csv`
+        * Driver: 
+        * Vanilla/TDB/PolarisERA5 results:
+        * Plot code:
+
+* Figure 6: Impact of Result Size
+        * Queries: `../queries/changing_result_size.csv`
+        * Driver: 
+        * Vanilla/TDB/PolarisERA5 results:
+        * Plot code: 
+
+* Figure 8: Find Time Query Performance
+        * Queries: `../queries/find_time.csv`
+        * Driver: 
+        * Vanilla/TDB/PolarisERA5 results:
+        * Plot code:
+
+* Figure 7: Heatmap Query Performance
+        * Queries: `../queries/heatmap.csv`
+        * Driver: 
+        * Vanilla/TDB/PolarisERA5 results:
+        * Plot code:
