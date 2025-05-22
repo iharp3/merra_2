@@ -111,8 +111,9 @@ Files in github repository: `experiment-kit/round2`
         * Plot code: `../figs/code/hmplot.py`
 
 ### Current experiments
-- For queries: change time ranges, region must be within Greenland.
-- For driver: copy driver for MERRA-2 data, add file copying to mimic cold start.
+- DONE: For queries: change time ranges, region must be within Greenland.
+- For driver: copy driver for MERRA-2 data
+- For driver: add file copying to mimic cold start.
 - For results: concatenate MERRA-2 results with previous results.
 - For plots: add MERRA-2 line, aggregate ERA5 and MERRA-2 line 
 
@@ -120,8 +121,8 @@ Files in github repository: `merra_2/experiments`
 
 * Figure 5: Impact of Changing Spatial and Temporal Resolutions
         * Queries: `../queries/changing_resolutions.csv`
-        * Driver: 
-        * Vanilla/TDB/PolarisERA5 results:
+        * Driver: `polaris_driver.py`
+        * Vanilla/TDB/PolarisERA5 results: `../results/changing_resolutions_Polaris.csv`
         * Plot code:
 
 * Figure 6: Impact of Result Size
