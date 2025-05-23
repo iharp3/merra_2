@@ -4,3 +4,4 @@ xarray
 netCDF4==1.6.2
 earthaccess
 dask[complete]
+matplotlib

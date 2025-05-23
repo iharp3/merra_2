@@ -20,12 +20,13 @@ import pandas as pd
 Temporal aggregation for 0.5x0.625-degree (raw-sp):
 (raw-sp, 3-hour) -> (raw-sp, day) -> (raw-sp, month) -> (raw-sp, year)
 """
-def time_driver():
+def time_driver(base_file_name):
     cluster = LocalCluster(n_workers=10)
     client = cluster.get_client()
 
-    base_file_name = "AODANA_2015-2024"
-    file_name = os.path.join("/home/uribe055/merra_2/data", "AODANA_2015-2024.nc")
+    # base_file_name = "AODANA_2015-2024"
+    file_name_nc = base_file_name + ".nc"
+    file_name = os.path.join("/home/uribe055/merra_2/data_yr", file_name_nc)
     print(f"Processing {base_file_name}\n")
     
     start_time = clock.time()
@@ -114,8 +115,8 @@ Spatial aggregation for daily, monthly, and yearly data:
 (0, year) -> (0.5, year)
 (0, year) -> (1, year)
 """
-def space_driver():
-    base_file_name = f"AODANA_2015-2024"
+def space_driver(base_file_name):
+    # base_file_name = f"AODANA_2015-2024"
     print(f"Processing {base_file_name}")
 
     start_time = clock.time()
@@ -184,11 +185,11 @@ Spatial aggregation for hourly data: need to be separated from the above one, as
 (0, hour) -> (1, hour)
 (0, hour) -> (2, hour)
 """
-def space2_driver():
+def space2_driver(base_file_name):
     cluster = LocalCluster(n_workers=10)
     client = cluster.get_client()
 
-    base_file_name = f"AODANA_2015-2024"
+    # base_file_name = f"AODANA_2015-2024"
     print(f"Processing {base_file_name}")
     file_name = os.path.join("/home/uribe055/merra_2/data", "AODANA_2015-2024.nc")
     start_time = clock.time()
@@ -236,12 +237,14 @@ def space2_driver():
 
 if __name__ == "__main__":
 
-    t_t = time_driver()
-    print(f"\n~~~Temporal aggregation: {t_t}\n")
-    s_t = space_driver()
-    print(f"~~~Spatial aggregation: {s_t}\n")
-    s_h_t = space2_driver()
-    print(f"\tsp.agg. hourly: {s_h_t}\n")
+    for i in [ 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024]:
+        fn = str(i)
+        t_t = time_driver(base_file_name=fn)
+        print(f"\n~~~Temporal aggregation: {t_t}\n")
+        s_t = space_driver(base_file_name=fn)
+        print(f"~~~Spatial aggregation: {s_t}\n")
+        s_h_t = space2_driver(base_file_name=fn)
+        print(f"\tsp.agg. hourly: {s_h_t}\n")
 
-    all_times = {"TOTAL_AGG_TIME": round((t_t+ s_t + s_h_t), 2)}
-    print(f"Total Aggregation time:{all_times}")
+        all_times = {f"TOTAL_AGG_TIME_{fn}": round((t_t+ s_t + s_h_t), 2)}
+        print(f"Total Aggregation time:{all_times}")

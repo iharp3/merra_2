@@ -37,13 +37,15 @@ Code was taken from the [python](https://disc.gsfc.nasa.g`ov/information/howto?k
 * The server stopped responding for a whole evening. No helpful error or information given.
 * Some years downloaded completely without any issue. For most of the years, not all granules (days) of the year downloaded, so some days and range of days had to be re-requested so they could be downloaded before the data was concatenated into a year file. This request time was similar to the original request time even when only a couple URLs (~2-10 instead of ~365) were requested, and was not added to the original request time.
 * The download time does not count the concatenation time needed to combine the granules into years and then all the yearly files into one file with the whole time range. 
-* Concatenating all the years into one took about 1 minute.
-* The size of `AODANA_2015-2024.nc` is 692MB.
+* Concatenating all the years into one took about 1 minute. The size of the concatenated file, `AODANA_2015-2024.nc`, is 692MB.
 
 ## Aggregating the data
 We aggregate the data from a **3-hour** interval temporal resolution to *daily, monthly,* and *yearly* resolutions, and we spatially aggregate the data at each temporal resolution from a **0.5 x 0.625** coordinate degree spatial resolution to *1 x 1.25* degree resolution and *1.5 x 1.875* degree resolution.
 
-The code can be found in `../merra_2/aggregation/agg_driver.py`)
+The code can be found in `../merra_2/aggregation/agg_driver.py`
+
+Notes on aggregating the data:
+* Data is aggregated from the concatenated file `../merra_2/data/AODANA_2015-2024.nc` and from the yearly files in `../merra_2/data_yr`.
 
 ## Measuring performance
 **Timing data request and downloading:** URLs for each year were requested simultaneously, so we have one request time for each year. Then for each day we kept track of the download time. Thus, we can get the following statistics:
@@ -119,26 +121,37 @@ Files in github repository: `experiment-kit/round2`
 
 Files in github repository: `merra_2/experiments`
 
-* Figure 5: Impact of Changing Spatial and Temporal Resolutions
-        * Queries: `../queries/changing_resolutions.csv`
-        * Driver: `polaris_driver.py`
-        * Vanilla/TDB/PolarisERA5 results: `../results/changing_resolutions_Polaris.csv`
-        * Plot code:
+#### Figure 5: Impact of Changing Spatial and Temporal Resolutions
+* Queries: `../queries/changing_resolutions.csv`
+* Driver: `polaris_driver.py`
+* All results: `../results_all/fig5.csv` OR `../results_all/fig5_avg.csv`
+* Plot code: `../plot_drivers/fig5.py`
 
-* Figure 6: Impact of Result Size
-        * Queries: `../queries/changing_result_size.csv`
-        * Driver: 
-        * Vanilla/TDB/PolarisERA5 results:
-        * Plot code: 
+**YEARLY FILE** Running the experiments with a file for each year and saving each of the aggregations of a year to a unique file so each year has their own aggregation files for each aggregation gives relatively the same execution time for every resolution, though more for daily resolution. Each query must read multiple files. Results are in `../results/results_changing_resolutions_yearly_files.csv`.
 
-* Figure 8: Find Time Query Performance
-        * Queries: `../queries/find_time.csv`
-        * Driver: 
-        * Vanilla/TDB/PolarisERA5 results:
-        * Plot code:
+**ONE FILE** Running the experiments with a file for all the years and aggregating all the years together (saving all the results for one aggregation to one file) gives the same execution time for every resolution. Results are in `../results/results_changing_resolutions_one_file.csv`.
 
-* Figure 7: Heatmap Query Performance
-        * Queries: `../queries/heatmap.csv`
-        * Driver: 
-        * Vanilla/TDB/PolarisERA5 results:
-        * Plot code:
+**MIXED** Running the experiments with a file for each year and saving the aggregations of all the files to one file for each aggregation is about the same as running experiments in one file. Results are in `../results/results_changing_resolutions_mixed.csv`.
+
+**Conclusion** When Polaris has to access multiple files, it takes longer (about 0.065 seconds) than if there is just one file to access. For the raw temporal data (hourly values) the coarser spatial resolution reduces the execution time by an order of magnitude: For raw spatial resolution the execution time is around 3 seconds, once aggregated is one second, and twice aggregated is 0.4 seconds. The trend we want to show is that the execution time changes as the resolutions coarsen. The hourly data is just more slow if it is in multiple files but it doesn't change the end result.
+
+
+#### Figure 6: Impact of Result Size
+* Queries: `../queries/changing_result_size.csv`
+* Driver: `polaris_driver.py`
+* All results: `../results_all/fig6.csv`
+* Plot code: `../plot_drivers/fig6.py`
+
+**Question** At the finest resolution (0.25, hourly): why does MERRA2 take more time than ERA5? It is smaller data, and it has less hourly values (since it is 3-hour increments) and it has less spatial values too (since it is 0.5x0.625). 
+
+#### Figure 8: Find Time Query Performance
+* Queries: `../queries/find_time.csv`
+* Driver: `polaris_driver.py`
+* All results:
+* Plot code:
+
+#### Figure 7: Heatmap Query Performance
+* Queries: `../queries/heatmap.csv`
+* Driver: 
+* All results:
+* Plot code:

@@ -1,6 +1,11 @@
 # data folder and files
 *.nc
 
+# intermediate results
+results/
+plots/
+test/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

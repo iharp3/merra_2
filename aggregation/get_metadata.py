@@ -12,14 +12,15 @@ import re
 
 def extract_metadata_from_filename(filename):
     """Extract variable, spatial_resolution, temporal_resolution, aggregation from filename."""
-    pattern = r'^(.*?)_\d{4}-\d{4}_(.*?)_(.*?)_(.*?)\.nc$'
+    pattern = r'\d{4}_(.*?)_(.*?)_(.*?)\.nc$'
     match = re.match(pattern, filename)
     if match:
-        variable, spatial_resolution, temporal_resolution, aggregation = match.groups()
-        return variable, spatial_resolution, temporal_resolution, aggregation
+        # variable, spatial_resolution, temporal_resolution, aggregation = match.groups()   # for concatenated file
+        spatial_resolution, temporal_resolution, aggregation = match.groups()   # for yearly files
+        return "AODANA", spatial_resolution, temporal_resolution, aggregation
     else:
         return "AODANA", 0, "hour", "none"
-        # return None, None, None, None
+        # return None, None, None, None 
 
 def get_nc_metadata(nc_path):
     """Extract metadata from a NetCDF file."""
@@ -70,5 +71,5 @@ def process_folder(folder_path, output_csv='metadata.csv'):
     print(f"Metadata saved to {output_csv}")
 
 if __name__ == "__main__":
-    folder_path = "/home/uribe055/merra_2/data"
+    folder_path = "/home/uribe055/merra_2/data_yr"
     process_folder(folder_path)
