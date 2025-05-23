@@ -41,15 +41,15 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
             filter_value=q["filter_value"],     # FOR Find Time 
             )
             if cur_exp == "FT":
-                try:
-                    t0 = time.time()
-                    qe.execute()
-                    tr = time.time() - t0
-                except Exception as e:
-                    print("find time query fail")
-                    print(q)
-                    print(e)
-                    tr = -1
+                # try:
+                t0 = time.time()
+                qe.execute()
+                tr = time.time() - t0
+                # except Exception as e:
+                    # print("find time query fail")
+                    # print(q)
+                    # print(e)
+                    # tr = -1
             else:        
                 try:
                     tr = qe.execute()

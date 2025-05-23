@@ -4,6 +4,7 @@ copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/exec
 
 import pandas as pd
 import xarray as xr
+import time
 
 from .query_executor import QueryExecutor
 from .query_executor_timeseries import TimeseriesExecutor
@@ -95,11 +96,12 @@ class FindTimeExecutor(QueryExecutor):
             - find hour <= x: if year-min >  x, return False; if year-max <= x, return True
         """
         years, months, days, hours = get_whole_period_between(self.start_datetime, self.end_datetime)
-        time_points = pd.date_range(start=self.start_datetime, end=self.end_datetime, freq="h")
+        time_points = pd.date_range(start=self.start_datetime, end=self.end_datetime, freq="3h")
         result = xr.Dataset(
             data_vars={self.variable: (["time"], [None] * len(time_points))},
             coords=dict(time=time_points),
         )
+        print(f"\nyears, months, days, hours: {years, months, days, hours}\n time points: {time_points}\nlength time points: {len(time_points)}\n\nDATASET:\n{result}")
 
         if years:
             # print("checking years")
@@ -227,6 +229,7 @@ class FindTimeExecutor(QueryExecutor):
     def _get_min_max_time_series(self, _range, temporal_res):
         total_start = _range[0][0]
         total_end = _range[-1][1]
+        print(f"start:{total_start}\nend:{total_end}\n t res:{temporal_res}")
         min_exec = TimeseriesExecutor(
             variable=self.variable,
             start_datetime=total_start,
