@@ -1,19 +1,12 @@
 '''
+Edited from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/driver.py
+    Accessed: May 21, 2025
+    
 Calls Polaris query executors to run requested queries. Records execution time.
+
+Outline:    
 '''
 
-# Import executors
-
-# Load query csv
-
-# Do this three times:
-    # Perform each query 
-
-    # Record query execution time
-
-    # Save time back to csv
-
-# Take average of times and save avg to csv as `execution_time`
 
 import time
 import pandas as pd
@@ -46,12 +39,17 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
             )
             try:
                 tr = qe.execute()
-                print(f"s: {s}  t: {t}, q: {q}")
-                print(tr)
+                # print(f"s: {s}  t: {t}, q: {q}")
+                # print(tr)
             except Exception as e:
-                print(q)
+                print(f"\nt: {t}\ts: {s}\tt0: {q["start_time"]}\tt1: {q["end_time"]}")
+                # print(q)
                 print(e)
                 tr = -1
+
+            # tr = qe.execute()
+            # print(f"s: {s}  t: {t}, q: {q}")
+            # print(tr)
 
             if tr != -1:
                 ta = 0
@@ -64,29 +62,41 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
                                         "total_time": tr + ta})
                 print("======================\n")
             else:
-                print(f"-1")
+                # print(f"-1")
+                pass
 
     return results_list
 
 if __name__ == "__main__":
     
-    main_dir = "/home/uribe055/experiments"
-    sys.path.append(os.path.join(main_dir, "executors"))
+    all_results = []
+    for i in range(1,4):
+        main_dir = "/home/uribe055/merra_2/experiments"
+        sys.path.append(os.path.join(main_dir, "executors"))
 
-    ##### For changing resolutions exp #####
-    cur_exp = "GR"
-    t_res = ["hour", "day", "month", "year"]
-    s_res = [0, 1, 2]
-    filename = "changing_resolutions.csv"
+        ##### For changing resolutions exp (FIGURE 5)#####
+        # cur_exp = "GR"
+        # t_resolutions = ["hour", "hour", "hour", "day", "day", "day", "year", "year", "year", "month", "month"]
+        # s_resolutions = [0, 1, 2, 0, 1, 2, 0, 1, 2, 1, 2]
+        # filename = "changing_resolutions.csv"
+        # outfilename = "results_" + filename
 
+        ##### For changing result size exp (FIGURE 6) #####
+        cur_exp = "GR"
+        t_resolutions = ["hour", "hour", "hour", "year", "year", "year",  "month", "month", "month", "hour", "hour", "hour", "year", "year", "year"]
+        s_resolutions = [0,0,0, 0,0,0, 1,1,1, 2,2,2, 2,2,2]
+        # percent_area = [1, 25, 50, 1, 25, 50,1, 25, 50,1, 25, 50,1, 25, 50]
+        filename = "changing_result_size.csv"
+        outfilename = "results_" + filename 
 
     ##### MAIN #####
-    results_list = experiment_executor(cur_exp="GR",
-                                       t_res=[],
-                                       s_res=[],
-                                       df_query=pd.read_csv(os.path.join(main_dir, "queries", filename)),
-                                       )
-
-    results_df = pd.DataFrame(results_list)
-    out_file = os.path.join(main_dir, f"results/changing_resolutions_{"Polaris-Merra2"}.csv")
+        results_list = experiment_executor(cur_exp=cur_exp,
+                                        t_res=t_resolutions,
+                                        s_res=s_resolutions,
+                                        df_query=pd.read_csv(os.path.join(main_dir, "queries", filename)),
+                                        )
+        all_results += results_list
+    
+    results_df = pd.DataFrame(all_results)
+    out_file = os.path.join(main_dir, "results", outfilename)
     results_df.to_csv(out_file, index=False)

@@ -42,7 +42,7 @@ class QueryExecutor(ABC):
         if metadata:
             self.metadata = Metadata(metadata)
         else:
-            self.metadata = Metadata("/home/uribe055/merra_2/data/metadata.csv")
+            self.metadata = Metadata("/home/uribe055/merra_2/data_yr_only/metadata_yearly_files_agg_one_file.csv")
 
     @abstractmethod
     def execute(self) -> xr.Dataset:

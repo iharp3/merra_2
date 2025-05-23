@@ -6,9 +6,11 @@ import math
 import pandas as pd
 import xarray as xr
 import time
+import random
 
 from executors.query_executor import QueryExecutor
 
+from datetime import datetime, timedelta
 
 class GetRasterExecutor(QueryExecutor):
     def __init__(
@@ -60,54 +62,8 @@ class GetRasterExecutor(QueryExecutor):
 
         local_files = df_overlap["file_path"].tolist()
         api_calls = []
-        if leftover is not None:
-            leftover_min_lat = math.floor(leftover.latitude.min().item())
-            leftover_max_lat = math.ceil(leftover.latitude.max().item())
-            leftover_min_lon = math.floor(leftover.longitude.min().item())
-            leftover_max_lon = math.ceil(leftover.longitude.max().item())
-            leftover_start_datetime = pd.Timestamp(leftover.time.min().item())
-            leftover_end_datetime = pd.Timestamp(leftover.time.max().item())
-            leftover_start_year, leftover_start_month, leftover_start_day = (
-                leftover_start_datetime.year,
-                leftover_start_datetime.month,
-                leftover_start_datetime.day,
-            )
-            leftover_end_year, leftover_end_month, leftover_end_day = (
-                leftover_end_datetime.year,
-                leftover_end_datetime.month,
-                leftover_end_datetime.day,
-            )
-
-            years = [str(i) for i in range(leftover_start_year, leftover_end_year + 1)]
-            months = [str(i).zfill(2) for i in range(1, 13)]
-            days = [str(i).zfill(2) for i in range(1, 32)]
-            if self.temporal_resolution == "month":
-                if leftover_start_year == leftover_end_year:
-                    months = [str(i).zfill(2) for i in range(leftover_start_month, leftover_end_month + 1)]
-            if self.temporal_resolution == "day" or self.temporal_resolution == "hour":
-                if leftover_start_year == leftover_end_year:
-                    months = [str(i).zfill(2) for i in range(leftover_start_month, leftover_end_month + 1)]
-                    if leftover_start_month == leftover_end_month:
-                        days = [str(i).zfill(2) for i in range(leftover_start_day, leftover_end_day + 1)]
-
-            print(f"DATA OUT OF RANGE:\nNEED\n\tyears:{years}\n\tmonths:{months}\n\tdays:{days}")
-            '''
-            ERA5 Call for download 
-            '''
-            # dataset = "reanalysis-era5-single-levels"
-            # request = {
-            #     "product_type": ["reanalysis"],
-            #     "variable": [self.variable],
-            #     "year": years,
-            #     "month": months,
-            #     "day": days,
-            #     "time": [f"{str(i).zfill(2)}:00" for i in range(0, 24)],
-            #     "data_format": "netcdf",
-            #     "download_format": "unarchived",
-            #     "area": [leftover_max_lat, leftover_min_lon, leftover_min_lat, leftover_max_lon],
-            # }
-            # api_calls.append((dataset, request))
-
+        # if leftover is not None: ...
+        
         local_files = sorted(local_files)
         return local_files, api_calls
 
@@ -120,23 +76,17 @@ class GetRasterExecutor(QueryExecutor):
         # 3.2 read local files
         ds_list = []
         for file in file_list:
-            ds = xr.open_dataset(file, engine="netcdf4").sel(
-                time=slice(self.start_datetime, self.end_datetime),
-                latitude=slice(self.max_lat, self.min_lat),
-                longitude=slice(self.min_lon, self.max_lon),
-            )
-            ds_list.append(ds)
+            ds = xr.open_dataset(file, engine="netcdf4")
+            ds = ds.sortby("time")
 
-        # 3.3 assemble result
-        # compat="override" is a temporal walkaround as pre-aggregation value conflicts with downloaded data
-        # future solution: use new encoding when write pre-aggregated data
-        # try:
-        #     ds = xr.merge([i.chunk() for i in ds_list], compat="no_conflicts")
-        # except ValueError:
-        #     print("WARNING: conflict in merging data, use override")
-        #     ds = xr.merge([i.chunk() for i in ds_list], compat="override")
+            # ds = xr.open_dataset(file, engine="netcdf4").sel(
+            #     time=slice(self.start_datetime, self.end_datetime),
+            #     lat=slice(self.max_lat, self.min_lat),
+            #     lon=slice(self.min_lon, self.max_lon),
+            # )
+            ds_list.append(ds)
 
         self.ds = xr.concat([i.chunk() for i in ds_list], dim="time")
         self.ds.compute()
-        
+
         return time.time() - t0
