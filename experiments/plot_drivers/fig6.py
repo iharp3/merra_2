@@ -9,6 +9,7 @@ import matplotlib
 
 # Load the CSV file
 csv_file_path = "/home/uribe055/merra_2/experiments/results_all/" + "fig6_avg.csv"
+# csv_file_path = "/home/uribe055/merra_2/experiments/results_using_M_executors/results_changing_result_size.csv"
 df = pd.read_csv(csv_file_path)
 
 # cur_plot = "s_res"

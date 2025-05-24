@@ -5,6 +5,8 @@
 results/
 plots/
 test/
+# executors_find_time/
+results_using_M_executors
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
