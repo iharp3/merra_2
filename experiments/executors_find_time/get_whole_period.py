@@ -15,7 +15,7 @@ def get_whole_year_between(start_dt, end_dt):
     start_year = start_dt.year
     end_year = end_dt.year
     first_hour_start_year = pd.Timestamp(f"{start_year}-01-01 00:00:00")
-    last_hour_end_year = pd.Timestamp(f"{end_year}-12-31 23:00:00")
+    last_hour_end_year = pd.Timestamp(f"{end_year}-12-30 21:00:00")
     years = list(range(start_year, end_year + 1))
     if start_dt != first_hour_start_year:
         years = years[1:]
@@ -23,7 +23,7 @@ def get_whole_year_between(start_dt, end_dt):
         years = years[:-1]
     # residual
     residual = []
-    last_hour_start_year = pd.Timestamp(f"{start_year}-12-31 23:00:00")
+    last_hour_start_year = pd.Timestamp(f"{start_year}-12-30 21:00:00")
     first_hour_end_year = pd.Timestamp(f"{end_year}-01-01 00:00:00")
     if start_dt != first_hour_start_year and end_dt <= last_hour_start_year:
         residual.append([start_dt, end_dt])
@@ -139,7 +139,7 @@ def get_whole_ranges_between(start, end):
     whole_years, residual = get_whole_year_between(start_dt, end_dt)
     if whole_years:
         year_start = pd.Timestamp(f"{whole_years[0]}-01-01 00:00:00")
-        year_end = pd.Timestamp(f"{whole_years[-1]}-12-31 23:00:00")
+        year_end = pd.Timestamp(f"{whole_years[-1]}-12-31 21:00:00")
         year_range.append([year_start, year_end])
     for res in residual:
         months, residual = get_whole_month_between(pd.Timestamp(res[0]), pd.Timestamp(res[1]))
@@ -151,7 +151,7 @@ def get_whole_ranges_between(start, end):
             days, residual = get_whole_day_between(pd.Timestamp(res[0]), pd.Timestamp(res[1]))
             if days:
                 day_start = pd.Timestamp(f"{days[0]} 00:00:00")
-                day_end = pd.Timestamp(f"{days[-1]} 23:00:00")
+                day_end = pd.Timestamp(f"{days[-1]} 21:00:00")
                 day_range.append([day_start, day_end])
             for res in residual:
                 hour_start = pd.Timestamp(f"{res[0]}")
@@ -172,7 +172,7 @@ def get_total_hours_in_month(month):
 def get_total_hours_between(start, end):
     start_dt = pd.to_datetime(start)
     end_dt = pd.to_datetime(end)
-    return int((end_dt - start_dt) / pd.Timedelta("3 hour")) + 1
+    return (int((end_dt - start_dt) / pd.Timedelta("3 hour")) + 1) + 8
 
 
 def iterate_months(start_month, end_month):

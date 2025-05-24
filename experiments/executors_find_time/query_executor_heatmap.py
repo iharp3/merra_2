@@ -82,13 +82,14 @@ class HeatmapExecutor(QueryExecutor):
                 self.max_lat,
                 self.min_lon,
                 self.max_lon,
-                temporal_resolution="year",
+                temporal_resolution="hour",
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_year.append(get_raster_year.execute())
             year_hours += [get_total_hours_in_year(y) for y in range(start_year.year, end_year.year + 1)]
+            # print(f"year hours \n{year_hours}\n\n\nds_year\n {ds_year}")
         for start_month, end_month in month_range:
             get_raster_month = GetRasterExecutor(
                 self.variable,
@@ -98,13 +99,14 @@ class HeatmapExecutor(QueryExecutor):
                 self.max_lat,
                 self.min_lon,
                 self.max_lon,
-                temporal_resolution="month",
+                temporal_resolution="hour",
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_month.append(get_raster_month.execute())
             month_hours += [get_total_hours_in_month(m) for m in iterate_months(start_month, end_month)]
+            # print(f"month hours {month_hours}")
         for start_day, end_day in day_range:
             get_raster_day = GetRasterExecutor(
                 self.variable,
@@ -114,13 +116,14 @@ class HeatmapExecutor(QueryExecutor):
                 self.max_lat,
                 self.min_lon,
                 self.max_lon,
-                temporal_resolution="day",
+                temporal_resolution="hour",
                 spatial_resolution=self.spatial_resolution,
                 aggregation=self.heatmap_aggregation_method,
                 metadata=self.metadata.f_path,
             )
             ds_day.append(get_raster_day.execute())
-            day_hours += [24 for _ in range(number_of_days_inclusive(start_day, end_day))]
+            day_hours += [8 for _ in range(number_of_days_inclusive(start_day, end_day))]
+            # print(f"day hours {day_hours}")
         for start_hour, end_hour in hour_range:
             get_raster_hour = GetRasterExecutor(
                 self.variable,
@@ -137,13 +140,20 @@ class HeatmapExecutor(QueryExecutor):
             )
             ds_hour.append(get_raster_hour.execute())
             hour_hours += [1 for _ in range(number_of_hours_inclusive(start_hour, end_hour))]
+            # print(f"hour hours {hour_hours}")
 
         xrds_concat = xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="time")
-        nd_array = xrds_concat[self.variable_short_name].to_numpy()
-        weights = np.array(year_hours + month_hours + day_hours + hour_hours)
-        total_hours = get_total_hours_between(self.start_datetime, self.end_datetime)
-        weights = weights / total_hours
-        average = np.average(nd_array, axis=0, weights=weights)
+        # print(f"\n")
+        # print(f"xrds concat\n {xrds_concat}")
+        nd_array = xrds_concat[self.variable].to_numpy()
+        # print(f"\nndarray len {len(nd_array)}")
+        # weights = np.array(year_hours + month_hours + day_hours + hour_hours)
+        # total_hours = get_total_hours_between(self.start_datetime, self.end_datetime)
+        # print(f"\nweights array {weights}\n\ntotal hours {total_hours}")
+        # weights = weights / total_hours
+        # print(f"\nweights/total hours {weights}")
+        # average = np.average(nd_array, axis=0, weights=weights)
+        average = np.average(nd_array, axis=0)
         res = xr.Dataset(
             {self.variable: (["lat", "lon"], average)},
             coords={"lat": xrds_concat.lat, "lon": xrds_concat.lon},

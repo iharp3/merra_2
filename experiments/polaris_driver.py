@@ -36,12 +36,13 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
             spatial_resolution=s,
             temporal_resolution=t,
             aggregation=q["aggregation"],
-            time_series_aggregation_method=q["aggregation"],    # FOR FILTER VALUE
-            filter_predicate=q["filter_predicate"],      # FOR FILTER VALUE
-            filter_value=q["filter_value"],          # FOR FILTER VALUE
+            # time_series_aggregation_method=q["aggregation"],      # FOR FILTER VALUE
+            # filter_predicate=q["filter_predicate"],               # FOR FILTER VALUE
+            # filter_value=q["filter_value"],                       # FOR FILTER VALUE
+            heatmap_aggregation_method=q["aggregation"]         # FOR HEATMAP  
             )
             
-            if cur_exp == "FT":
+            if cur_exp != "GR":
                 # try:
                 t0 = time.time()
                 qe.execute()
@@ -73,7 +74,8 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
                 results_list.append({"sys": "Polaris-MERRA2", 
                                         "t_res": t,
                                         "s_res": spatial_res[s],
-                                        "filter_value": q["filter_value"],      # FOR FIND TIME
+                                        # "filter_value": q["filter_value"],    # FOR FIND TIME
+                                        "time_span":q["time_span"],             # FOR HEATMAP
                                         "tr": tr,
                                         "ta": ta,
                                         "total_time": tr + ta,
@@ -125,9 +127,9 @@ if __name__ == "__main__":
 
         ##### For heatmap exp (FIGURE 7) ####
         cur_exp = "HE"
-        t_resolutions = []
-        s_resolutions = []
-        filename = ""
+        t_resolutions = ["hour", "hour", "month", "month", "year", "year"]
+        s_resolutions = [0, 1, 0, 1, 0, 1]
+        filename = "heatmap.csv"
         outfilename = "results_" + filename
 
     ##### MAIN #####
