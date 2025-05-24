@@ -100,17 +100,17 @@ Files in github repository: `experiment-kit/round2`
         * Vanilla/TDB/PolarisERA5 results: `../results/5a_all.csv`
         * Plot code: `../figs/code/5aplot.py`
 
+* Figure 7: Heatmap Query Performance
+        * Queries: `../tests/hmft.csv`
+        * Driver: `driverhmft.py`
+        * Vanilla/TDB/PolarisERA5 results: *heatmap_all.csv*
+        * Plot code: `../figs/code/hmplot.py`
+
 * Figure 8: Find Time Query Performance
         * Queries: `../tests/fv_new.csv`
         * Driver: `driverfv.py`
         * Vanilla/TDB/PolarisERA5 results: `../results/greenland.csv`
         * Plot code: `../figs/code/fvplot.py`
-
-* Figure 7: Heatmap Query Performance
-        * Queries: `../tests/hmft.csv`
-        * Driver: `driverhmft.py`
-        * Vanilla/TDB/PolarisERA5 results: *heatmap.csv*
-        * Plot code: `../figs/code/hmplot.py`
 
 ### Current experiments
 - DONE: For queries: change time ranges, region must be within Greenland.
@@ -144,14 +144,14 @@ Files in github repository: `merra_2/experiments`
 
 **Question** At the finest resolution (0.25, hourly): why does MERRA2 take more time than ERA5? It is smaller data, and it has less hourly values (since it is 3-hour increments) and it has less spatial values too (since it is 0.5x0.625). 
 
+#### Figure 7: Heatmap Query Performance
+* Queries: `../queries/heatmap.csv`
+* Driver: `polaris_driver.py`
+* All results: `../results_using_M_executors/results_heatmap.csv`
+* Plot code: `fig7.py`
+
 #### Figure 8: Find Time Query Performance
 * Queries: `../queries/find_time.csv`
 * Driver: `polaris_driver.py`
 * All results: `../results_all/fig8.csv`
-* Plot code:
-
-#### Figure 7: Heatmap Query Performance
-* Queries: `../queries/heatmap.csv`
-* Driver: 
-* All results:
-* Plot code:
+* Plot code: `fig8.py`
