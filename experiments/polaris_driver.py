@@ -17,11 +17,11 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
     results_list = []
 
     if cur_exp == "GR":
-        from executors.query_executor_get_raster import GetRasterExecutor as Executor
+        from executors_find_time.query_executor_get_raster import GetRasterExecutor as Executor
     if cur_exp == "HE":
-        from executors.query_executor_heatmap import HeatmapExecutor as Executor
+        from executors_find_time.query_executor_heatmap import HeatmapExecutor as Executor
     if cur_exp == "FT":
-        from executors.query_executor_find_time2 import FindTimeExecutor as Executor
+        from executors_find_time.query_executor_find_time2 import FindTimeExecutor as Executor
 
     for t, s in zip(t_res, s_res):
         for q in df_query.to_records():
@@ -36,15 +36,29 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
             spatial_resolution=s,
             temporal_resolution=t,
             aggregation=q["aggregation"],
+            time_series_aggregation_method=q["aggregation"],    # FOR FILTER VALUE
+            filter_predicate=q["filter_predicate"],      # FOR FILTER VALUE
+            filter_value=q["filter_value"],          # FOR FILTER VALUE
             )
             
-            try:
-                tr = qe.execute()
-            except Exception as e:
-                print(f"\nt: {t}\ts: {s}\tt0: {q["start_time"]}\tt1: {q["end_time"]}")
-                # print(q)
-                print(e)
-                tr = -1
+            if cur_exp == "FT":
+                # try:
+                t0 = time.time()
+                qe.execute()
+                tr = time.time() - t0
+                # except Exception as e:
+                #     print(f"\nt: {t}\ts: {s}\tt0: {q["start_time"]}\tt1: {q["end_time"]}")
+                #     # print(q)
+                #     print(e)
+                #     tr = -1
+            else:
+                try:
+                    tr = qe.execute()
+                except Exception as e:
+                    print(f"\nt: {t}\ts: {s}\tt0: {q["start_time"]}\tt1: {q["end_time"]}")
+                    # print(q)
+                    print(e)
+                    tr = -1
 
             if tr != -1:
                 ta = 0
@@ -59,10 +73,11 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
                 results_list.append({"sys": "Polaris-MERRA2", 
                                         "t_res": t,
                                         "s_res": spatial_res[s],
+                                        "filter_value": q["filter_value"],      # FOR FIND TIME
                                         "tr": tr,
                                         "ta": ta,
                                         "total_time": tr + ta,
-                                        "percent_area":q["percent_area"]
+                                        # "percent_area":q["percent_area"]      # FOR CHANGING RESULT SIZE
                                         })
                 print("======================\n")
             else:
@@ -80,7 +95,7 @@ if __name__ == "__main__":
     # sys.exit(1)
     
     all_results = []
-    for i in range(1,4):
+    for i in range(1,2):
         main_dir = "/home/uribe055/merra_2/experiments"
         sys.path.append(os.path.join(main_dir, "executors_find_time"))
 
@@ -93,20 +108,27 @@ if __name__ == "__main__":
         # outfilename = "results_" + filename
 
         ##### For changing result size exp (FIGURE 6) #####
-        cur_exp = "GR"
-        t_resolutions = ["hour", "hour", "hour", "year", "year", "year",  "month", "month", "month", "hour", "hour", "hour", "year", "year", "year"]
-        # s_resolutions = [0.25, 0.25, 0.25,0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 1,1,1, 1,1,1]
-        s_resolutions = [0,0,0,0,0,0,1,1,1,2,2,2,2,2,2]
-        # percent_area = [1, 25, 50, 1, 25, 50,1, 25, 50,1, 25, 50,1, 25, 50]
-        filename = "changing_result_size.csv"
-        outfilename = "results_" + filename 
+        # cur_exp = "GR"
+        # t_resolutions = ["hour", "hour", "hour", "year", "year", "year",  "month", "month", "month", "hour", "hour", "hour", "year", "year", "year"]
+        # # s_resolutions = [0.25, 0.25, 0.25,0.25, 0.25, 0.25, 0.5, 0.5, 0.5, 1,1,1, 1,1,1]
+        # s_resolutions = [0,0,0,0,0,0,1,1,1,2,2,2,2,2,2]
+        # # percent_area = [1, 25, 50, 1, 25, 50,1, 25, 50,1, 25, 50,1, 25, 50]
+        # filename = "changing_result_size.csv"
+        # outfilename = "results_" + filename 
 
         ##### For find time exp (FIGURE 8) #####
         # cur_exp = "FT"
-        # t_resolutions = ["hour"]
-        # s_resolutions = [1]
+        # t_resolutions = ["hour", "hour", "month", "year", "year" ]
+        # s_resolutions = [0, 2, 1, 0, 2]
         # filename = "find_time.csv"
-        # outfilename = "results_" + filename
+        # outfilename = "results_" + "fixed_csv_" + filename
+
+        ##### For heatmap exp (FIGURE 7) ####
+        cur_exp = "HE"
+        t_resolutions = []
+        s_resolutions = []
+        filename = ""
+        outfilename = "results_" + filename
 
     ##### MAIN #####
         results_list = experiment_executor(cur_exp=cur_exp,

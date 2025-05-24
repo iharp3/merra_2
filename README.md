@@ -147,7 +147,7 @@ Files in github repository: `merra_2/experiments`
 #### Figure 8: Find Time Query Performance
 * Queries: `../queries/find_time.csv`
 * Driver: `polaris_driver.py`
-* All results:
+* All results: `../results_all/fig8.csv`
 * Plot code:
 
 #### Figure 7: Heatmap Query Performance

@@ -224,6 +224,7 @@ class FindTimeExecutor(QueryExecutor):
 
         result_undetermined = result["time"].where(result[self.variable].isnull(), drop=True)
         # print(f"\nRESULT UNDETERMINED:\n{result_undetermined}")
+        # print(f"\nresult:\n\n {result}\n\nresult_undetermined: \n\n{result_undetermined}")
         if result_undetermined.size > 0:
             hour_range = time_array_to_range_ft(result_undetermined.values, "hour")
             first_hour = hour_range[0][0]
