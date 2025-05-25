@@ -20,7 +20,9 @@
                         "avg": {"max": 99.16, "min": 6.94, "mean": 7.31},
                         "total_agg": 125.83
                     },
-    "metadata": {},
+    "metadata": {"Metadata": {  "seconds": 3.26,
+                                "minutes": 0.05,
+                                "hours": 0.0009}},
 
     "total_agg": {"sec": 536.22, "min": 8.94}
 
