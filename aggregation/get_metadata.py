@@ -4,7 +4,7 @@ Create the metadata.csv file Polaris uses to query the data
 
 '''
 
-import time as clock
+import time
 import os
 import pandas as pd
 import xarray as xr
@@ -56,7 +56,7 @@ def get_nc_metadata(nc_path):
         print(f"Error processing {nc_path}: {e}")
         return None
 
-def process_folder(folder_path, output_csv='metadata.csv'):
+def process_folder(folder_path, output_csv='TIMED_metadata.csv'):
     """Process all .nc files in a folder and write metadata to a CSV."""
     metadata_list = []
     for filename in os.listdir(folder_path):
@@ -72,4 +72,10 @@ def process_folder(folder_path, output_csv='metadata.csv'):
 
 if __name__ == "__main__":
     folder_path = "/home/uribe055/merra_2/data_yr"
+
+    start_time = time.time()
     process_folder(folder_path)
+    end_time = time.time() - start_time
+
+
+    print(f"Metadata:\n\tseconds: {end_time}\n\tminutes: {end_time/60}\n\thours: {end_time/(60*60)}")

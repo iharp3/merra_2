@@ -69,7 +69,7 @@ Result for data:
                         Average seconds per day: 7.97
                         Average minutes per year: 48.53
 
-                TOTAL DATA AQUISITION TIME:
+                REQUEST + DOWNLOAD:
                         seconds: 29490.32
                         minutes: 491.51
                         hours: 8.19
@@ -155,3 +155,16 @@ Files in github repository: `merra_2/experiments`
 * Driver: `polaris_driver.py`
 * All results: `../results_all/fig8.csv`
 * Plot code: `fig8.py`
+
+**Filter Values**
+Statistics for the whole 10 years: 
+
+* Max: 6.6877947
+* Min: -0.0010391
+* Mean: 0.08047728
+
+Given these statistics, we choose the following 4 filter values:
+1. -0.0005
+2. 0.02
+3. 4.0
+4. 6.5

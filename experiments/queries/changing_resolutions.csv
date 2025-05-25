@@ -1,4 +1,4 @@
-,variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,aggregation
-0,AODANA,2015-01-01 00:00:00,2020-01-01 00:00:00,61,86,-69,-10,min
-1,AODANA,2015-01-01 00:00:00,2020-01-01 00:00:00,64,89,-69,-10,max
-2,AODANA,2015-01-01 00:00:00,2020-01-01 00:00:00,60,85,-69,-10,mean
+variable,start_time,end_time,min_lat,max_lat,min_lon,max_lon,aggregation
+AODANA,2015-01-01 00:00:00,2019-12-31 21:00:00,61,86,-69,-10,min
+AODANA,2015-01-01 00:00:00,2019-12-31 21:00:00,64,89,-69,-10,max
+AODANA,2015-01-01 00:00:00,2019-12-31 21:00:00,60,85,-69,-10,mean

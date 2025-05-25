@@ -1,11 +1,8 @@
-import json
-import os
-import numpy as np
+'''
+!!!!!
 
+Currently manually added to aggregation_times.json 
+    from print statements from running agg_driver.py and get_metadata.py
 
-
-filePath = "/home/uribe055/merra_2/data/aggregation_times.json"
-
-
-with open(filePath, 'r') as f:
-    pass
+!!!!!
+'''
