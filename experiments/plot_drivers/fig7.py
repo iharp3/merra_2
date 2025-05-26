@@ -4,7 +4,7 @@ import matplotlib
 
 # Load the CSV file
 # csv_file_path = "/home/uribe055/merra_2/experiments/results_all/fig7.csv"
-csv_file_path = "/home/uribe055/merra_2/experiments/results_using_M_executors/results_heatmap.csv"
+csv_file_path = "/home/uribe055/merra_2/experiments/results/results_heatmap.csv"
 df = pd.read_csv(csv_file_path)
 
 # cur_plot = "s_res"
@@ -13,8 +13,8 @@ line = "sys"
 y = "total_time"
 
 # Get unique plot values
-unique_plots = ["025_H", "025_Y", "025_M", "1_H", "1_Y"]
-cur_plot = [[0.25, "hour"], [0.25, "year"], [0.25, "month"], [1, "hour"], [1, "year"]]
+unique_plots = ["025_H", "05_Y", "025_M", "05_H", "05_Y"]
+cur_plot = [[0, "hour"], [1, "year"], [0, "month"], [1, "hour"], [1, "year"]]
 
 
 marker_size = 25
@@ -78,7 +78,7 @@ for plot_value, vals, positon in zip(unique_plots, cur_plot, legend_position): #
     
     # test
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/merra_2/experiments/plots/fig7_{plot_value}.png")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/merra_2/experiments/plot_drivers/plots/fig7_{plot_value}.png")  # Save the plot to a file
     plt.close(fig)
 
     # # final

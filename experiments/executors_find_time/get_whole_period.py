@@ -1,5 +1,8 @@
 '''
-copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/utils/get_whole_period.py
+Copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/utils/get_whole_period.py
+    May 2025
+
+Edited to read in 3-hourly data rather than hourly data
 '''
 
 import pandas as pd
@@ -15,7 +18,7 @@ def get_whole_year_between(start_dt, end_dt):
     start_year = start_dt.year
     end_year = end_dt.year
     first_hour_start_year = pd.Timestamp(f"{start_year}-01-01 00:00:00")
-    last_hour_end_year = pd.Timestamp(f"{end_year}-12-30 21:00:00")
+    last_hour_end_year = pd.Timestamp(f"{end_year}-12-31 21:00:00")
     years = list(range(start_year, end_year + 1))
     if start_dt != first_hour_start_year:
         years = years[1:]
@@ -43,7 +46,7 @@ def get_whole_month_between(start_dt, end_dt):
     start_month = start_dt.month
     end_month = end_dt.month
     first_hour_start_month = pd.Timestamp(f"{year}-{start_month:02d}-01 00:00:00")
-    last_hour_end_month = pd.Timestamp(f"{year}-{end_month:02d}-{get_last_date_of_month(end_dt)} 23:00:00")
+    last_hour_end_month = pd.Timestamp(f"{year}-{end_month:02d}-{get_last_date_of_month(end_dt)} 21:00:00")
     months = [f"{year}-{month:02d}" for month in range(start_month, end_month + 1)]
     if start_dt != first_hour_start_month:
         months = months[1:]
@@ -51,7 +54,7 @@ def get_whole_month_between(start_dt, end_dt):
         months = months[:-1]
     # residual
     residual = []
-    last_hour_start_month = pd.Timestamp(f"{year}-{start_month:02d}-{get_last_date_of_month(start_dt)} 23:00:00")
+    last_hour_start_month = pd.Timestamp(f"{year}-{start_month:02d}-{get_last_date_of_month(start_dt)} 21:00:00")
     first_hour_end_month = pd.Timestamp(f"{year}-{end_month:02d}-01 00:00:00")
     if start_dt != first_hour_start_month and end_dt <= last_hour_start_month:
         residual.append([start_dt, end_dt])
@@ -73,7 +76,7 @@ def get_whole_day_between(start_dt, end_dt):
     start_day = start_dt.day
     end_day = end_dt.day
     first_hour_start_day = pd.Timestamp(f"{year}-{month:02d}-{start_day:02d} 00:00:00")
-    last_hour_end_day = pd.Timestamp(f"{year}-{month:02d}-{end_day:02d} 23:00:00")
+    last_hour_end_day = pd.Timestamp(f"{year}-{month:02d}-{end_day:02d} 21:00:00")
     days = [f"{year}-{month:02d}-{day:02d}" for day in range(start_day, end_day + 1)]
     if start_dt != first_hour_start_day:
         days = days[1:]
@@ -81,7 +84,7 @@ def get_whole_day_between(start_dt, end_dt):
         days = days[:-1]
     # residual
     residual = []
-    last_hour_start_day = pd.Timestamp(f"{year}-{month:02d}-{start_day:02d} 23:00:00")
+    last_hour_start_day = pd.Timestamp(f"{year}-{month:02d}-{start_day:02d} 21:00:00")
     first_hour_end_day = pd.Timestamp(f"{year}-{month:02d}-{end_day:02d} 00:00:00")
     if start_dt != first_hour_start_day and end_dt <= last_hour_start_day:
         residual.append([start_dt, end_dt])
@@ -104,7 +107,7 @@ def get_whole_hour_between(start_dt, end_dt):
     day = start_dt.day
     start_hour = start_dt.hour
     end_hour = end_dt.hour
-    hours = [f"{year}-{month:02d}-{day:02d} {hour:02d}:00:00" for hour in range(start_hour, end_hour + 3)]
+    hours = [f"{year}-{month:02d}-{day:02d} {hour:02d}:00:00" for hour in range(start_hour, end_hour + 1, 3)]
     # print("hours:", hours)
     return hours
 
@@ -145,7 +148,7 @@ def get_whole_ranges_between(start, end):
         months, residual = get_whole_month_between(pd.Timestamp(res[0]), pd.Timestamp(res[1]))
         if months:
             month_start = pd.Timestamp(f"{months[0]}-01 00:00:00")
-            month_end = pd.Timestamp(f"{months[-1]}-{get_last_date_of_month(pd.Timestamp(months[-1]))} 23:00:00")
+            month_end = pd.Timestamp(f"{months[-1]}-{get_last_date_of_month(pd.Timestamp(months[-1]))} 21:00:00")
             month_range.append([month_start, month_end])
         for res in residual:
             days, residual = get_whole_day_between(pd.Timestamp(res[0]), pd.Timestamp(res[1]))
@@ -172,7 +175,7 @@ def get_total_hours_in_month(month):
 def get_total_hours_between(start, end):
     start_dt = pd.to_datetime(start)
     end_dt = pd.to_datetime(end)
-    return (int((end_dt - start_dt) / pd.Timedelta("3 hour")) + 1) + 8
+    return int((end_dt - start_dt) / pd.Timedelta("3 hour")) + 1
 
 
 def iterate_months(start_month, end_month):
@@ -201,7 +204,7 @@ def time_array_to_range(time_array, resolution):
     # quick fix for single year
     if resolution == "year" and len(time_array) == 1:
         single_year = time_array[0]
-        return [[pd.Timestamp(f"{single_year}-01-01 00:00:00"), pd.Timestamp(f"{single_year}-12-31 00:00:00")]]
+        return [[pd.Timestamp(f"{single_year}-01-01 00:00:00"), pd.Timestamp(f"{single_year}-12-31 21:00:00")]]
 
     if len(time_array) == 0:
         return []
@@ -235,57 +238,57 @@ def time_array_to_range(time_array, resolution):
             r[1] = pd.Timestamp(f"{r[1].year}-12-31 00:00:00")
     elif resolution == "month":
         for r in time_range:
-            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{get_last_date_of_month(r[1])} 00:00:00")
+            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{get_last_date_of_month(r[1])} 21:00:00")
     elif resolution == "day":
         for r in time_range:
-            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{r[1].day} 00:00:00")
+            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{r[1].day} 21:00:00")
 
     return time_range
 
-def time_array_to_range_ft(time_array, resolution):
-    """
-    Range: [[pd.Timestamp(start), pd.Timestamp(end)], ...]
-    """
-    # quick fix for single year
-    if resolution == "year" and len(time_array) == 1:
-        single_year = time_array[0]
-        return [[pd.Timestamp(f"{single_year}-01-01 00:00:00"), pd.Timestamp(f"{single_year}-12-31 00:00:00")]]
+# def time_array_to_range_ft(time_array, resolution):
+#     """
+#     Range: [[pd.Timestamp(start), pd.Timestamp(end)], ...]
+#     """
+#     # quick fix for single year
+#     if resolution == "year" and len(time_array) == 1:
+#         single_year = time_array[0]
+#         return [[pd.Timestamp(f"{single_year}-01-01 00:00:00"), pd.Timestamp(f"{single_year}-12-31 00:00:00")]]
 
-    if len(time_array) == 0:
-        return []
+#     if len(time_array) == 0:
+#         return []
 
-    if resolution == "year":
-        pd_delta = pd.Timedelta(days=366)
-        time_array = [f"{year}-01-01" for year in time_array]
-    elif resolution == "month":
-        pd_delta = pd.Timedelta(days=31)
-    elif resolution == "day":
-        pd_delta = pd.Timedelta(days=1)
-    elif resolution == "hour":
-        pd_delta = pd.Timedelta(hours=3)
+#     if resolution == "year":
+#         pd_delta = pd.Timedelta(days=366)
+#         time_array = [f"{year}-01-01" for year in time_array]
+#     elif resolution == "month":
+#         pd_delta = pd.Timedelta(days=31)
+#     elif resolution == "day":
+#         pd_delta = pd.Timedelta(days=1)
+#     elif resolution == "hour":
+#         pd_delta = pd.Timedelta(hours=3)
 
-    sorted_array = sorted(time_array)
-    time_range = []
-    start = sorted_array[0]
-    start_dt = pd.Timestamp(start)
-    end_dt = start_dt
-    for time in sorted_array[1:]:
-        if pd.Timestamp(time) - end_dt > pd_delta:
-            time_range.append([start_dt, end_dt])
-            start_dt = pd.Timestamp(time)
-        end_dt = pd.Timestamp(time)
-    if start_dt != end_dt:
-        time_range.append([start_dt, end_dt])
+#     sorted_array = sorted(time_array)
+#     time_range = []
+#     start = sorted_array[0]
+#     start_dt = pd.Timestamp(start)
+#     end_dt = start_dt
+#     for time in sorted_array[1:]:
+#         if pd.Timestamp(time) - end_dt > pd_delta:
+#             time_range.append([start_dt, end_dt])
+#             start_dt = pd.Timestamp(time)
+#         end_dt = pd.Timestamp(time)
+#     if start_dt != end_dt:
+#         time_range.append([start_dt, end_dt])
 
-    # post processing
-    if resolution == "year":
-        for r in time_range:
-            r[1] = pd.Timestamp(f"{r[1].year}-12-31 00:00:00")
-    elif resolution == "month":
-        for r in time_range:
-            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{get_last_date_of_month(r[1])} 00:00:00")
-    elif resolution == "day":
-        for r in time_range:
-            r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{r[1].day} 00:00:00")
+#     # post processing
+#     if resolution == "year":
+#         for r in time_range:
+#             r[1] = pd.Timestamp(f"{r[1].year}-12-31 00:00:00")
+#     elif resolution == "month":
+#         for r in time_range:
+#             r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{get_last_date_of_month(r[1])} 00:00:00")
+#     elif resolution == "day":
+#         for r in time_range:
+#             r[1] = pd.Timestamp(f"{r[1].year}-{r[1].month}-{r[1].day} 00:00:00")
 
-    return time_range
+#     return time_range

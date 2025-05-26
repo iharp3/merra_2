@@ -163,8 +163,15 @@ Statistics for the whole 10 years:
 * Min: -0.0010391
 * Mean: 0.08047728
 
-Given these statistics, we choose the following 4 filter values:
+Given these statistics, we choose the following filter values:
 1. -0.0005
-2. 0.02
-3. 4.0
-4. 6.5
+2. -0.05
+3. 0.0
+4. 0.005
+5. 0.5
+6. 1.5
+7. 2.5
+8. 3.5
+9. 4.5
+10. 5.5
+11. 6.5

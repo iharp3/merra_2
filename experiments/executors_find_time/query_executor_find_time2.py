@@ -1,5 +1,8 @@
 '''
-copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/query_executor_find_time2.py
+Copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/query_executor_find_time2.py
+    Accessed May 2025
+
+Edited to read in 3-hourly data rather than hourly data
 '''
 
 import pandas as pd
@@ -9,7 +12,7 @@ import sys
 
 from .query_executor import QueryExecutor
 from .query_executor_timeseries import TimeseriesExecutor
-from .get_whole_period import get_whole_period_between, get_last_date_of_month, time_array_to_range_ft
+from .get_whole_period import get_whole_period_between, get_last_date_of_month, time_array_to_range
 
 
 class FindTimeExecutor(QueryExecutor):
@@ -107,7 +110,7 @@ class FindTimeExecutor(QueryExecutor):
         # print(f"\tresult: \n{result}")
         if years:
             # print("checking years")
-            year_range = time_array_to_range_ft(years, "year")
+            year_range = time_array_to_range(years, "year")
             # print(f"\tyear range: {year_range}")
             year_min, year_max = self._get_min_max_time_series(year_range, "year")
             # print(f"\tyear min/max: {year_min}/{year_max}")
@@ -150,7 +153,7 @@ class FindTimeExecutor(QueryExecutor):
 
         if months:
             # print("checking months")
-            month_range = time_array_to_range_ft(months, "month")
+            month_range = time_array_to_range(months, "month")
             month_min, month_max = self._get_min_max_time_series(month_range, "month")
             for month in months:
                 month_determined = False
@@ -188,7 +191,7 @@ class FindTimeExecutor(QueryExecutor):
 
         if days:
             # print("checking days")
-            day_range = time_array_to_range_ft(days, "day")
+            day_range = time_array_to_range(days, "day")
             day_min, day_max = self._get_min_max_time_series(day_range, "day")
             for day in days:
                 day_determined = False
@@ -220,13 +223,13 @@ class FindTimeExecutor(QueryExecutor):
                         result[self.variable].loc[day:day] = False
                 if not day_determined:
                     # add hours to hours
-                    hours = hours + [f"{day} {hour:02d}:00:00" for hour in range(24)]
+                    hours = hours + [f"{day} {hour:02d}:00:00" for hour in range(0,24,3)]
 
         result_undetermined = result["time"].where(result[self.variable].isnull(), drop=True)
         # print(f"\nRESULT UNDETERMINED:\n{result_undetermined}")
         # print(f"\nresult:\n\n {result}\n\nresult_undetermined: \n\n{result_undetermined}")
         if result_undetermined.size > 0:
-            hour_range = time_array_to_range_ft(result_undetermined.values, "hour")
+            hour_range = time_array_to_range(result_undetermined.values, "hour")
             first_hour = hour_range[0][0]
             last_hour = hour_range[-1][1]
             start = first_hour.strftime("%Y-%m-%d %H:%M:%S")

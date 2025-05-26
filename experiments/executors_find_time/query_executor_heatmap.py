@@ -1,5 +1,8 @@
 '''
 copied from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/query_executor_heatmap.py
+    Accessed May 2024
+
+Edited to read in 3-hourly data rather than hourly data
 '''
 
 import numpy as np
@@ -139,7 +142,7 @@ class HeatmapExecutor(QueryExecutor):
                 metadata=self.metadata.f_path,
             )
             ds_hour.append(get_raster_hour.execute())
-            hour_hours += [1 for _ in range(number_of_hours_inclusive(start_hour, end_hour))]
+            hour_hours += [1 for _ in range(0, number_of_hours_inclusive(start_hour, end_hour), 3)]
             # print(f"hour hours {hour_hours}")
 
         xrds_concat = xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="time")
@@ -160,78 +163,78 @@ class HeatmapExecutor(QueryExecutor):
         )
         return res
 
-    def _get_max_heatmap(self):
-        year_range, month_range, day_range, hour_range = get_whole_ranges_between(
-            self.start_datetime, self.end_datetime
-        )
-        ds_year = []
-        ds_month = []
-        ds_day = []
-        ds_hour = []
-        for start_year, end_year in year_range:
-            get_raster_year = GetRasterExecutor(
-                self.variable,
-                str(start_year),
-                str(end_year),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="year",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.heatmap_aggregation_method,
-                metadata=self.metadata.f_path,
-            )
-            ds_year.append(get_raster_year.execute())
-        for start_month, end_month in month_range:
-            get_raster_month = GetRasterExecutor(
-                self.variable,
-                str(start_month),
-                str(end_month),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="month",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.heatmap_aggregation_method,
-                metadata=self.metadata.f_path,
-            )
-            ds_month.append(get_raster_month.execute())
-        for start_day, end_day in day_range:
-            get_raster_day = GetRasterExecutor(
-                self.variable,
-                str(start_day),
-                str(end_day),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="day",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.heatmap_aggregation_method,
-                metadata=self.metadata.f_path,
-            )
-            ds_day.append(get_raster_day.execute())
-        for start_hour, end_hour in hour_range:
-            get_raster_hour = GetRasterExecutor(
-                self.variable,
-                str(start_hour),
-                str(end_hour),
-                self.min_lat,
-                self.max_lat,
-                self.min_lon,
-                self.max_lon,
-                temporal_resolution="hour",
-                spatial_resolution=self.spatial_resolution,
-                aggregation=self.aggregation,
-                metadata=self.metadata.f_path,
-            )
-            ds_hour.append(get_raster_hour.execute())
+    # def _get_max_heatmap(self):
+    #     year_range, month_range, day_range, hour_range = get_whole_ranges_between(
+    #         self.start_datetime, self.end_datetime
+    #     )
+    #     ds_year = []
+    #     ds_month = []
+    #     ds_day = []
+    #     ds_hour = []
+    #     for start_year, end_year in year_range:
+    #         get_raster_year = GetRasterExecutor(
+    #             self.variable,
+    #             str(start_year),
+    #             str(end_year),
+    #             self.min_lat,
+    #             self.max_lat,
+    #             self.min_lon,
+    #             self.max_lon,
+    #             temporal_resolution="year",
+    #             spatial_resolution=self.spatial_resolution,
+    #             aggregation=self.heatmap_aggregation_method,
+    #             metadata=self.metadata.f_path,
+    #         )
+    #         ds_year.append(get_raster_year.execute())
+    #     for start_month, end_month in month_range:
+    #         get_raster_month = GetRasterExecutor(
+    #             self.variable,
+    #             str(start_month),
+    #             str(end_month),
+    #             self.min_lat,
+    #             self.max_lat,
+    #             self.min_lon,
+    #             self.max_lon,
+    #             temporal_resolution="month",
+    #             spatial_resolution=self.spatial_resolution,
+    #             aggregation=self.heatmap_aggregation_method,
+    #             metadata=self.metadata.f_path,
+    #         )
+    #         ds_month.append(get_raster_month.execute())
+    #     for start_day, end_day in day_range:
+    #         get_raster_day = GetRasterExecutor(
+    #             self.variable,
+    #             str(start_day),
+    #             str(end_day),
+    #             self.min_lat,
+    #             self.max_lat,
+    #             self.min_lon,
+    #             self.max_lon,
+    #             temporal_resolution="day",
+    #             spatial_resolution=self.spatial_resolution,
+    #             aggregation=self.heatmap_aggregation_method,
+    #             metadata=self.metadata.f_path,
+    #         )
+    #         ds_day.append(get_raster_day.execute())
+    #     for start_hour, end_hour in hour_range:
+    #         get_raster_hour = GetRasterExecutor(
+    #             self.variable,
+    #             str(start_hour),
+    #             str(end_hour),
+    #             self.min_lat,
+    #             self.max_lat,
+    #             self.min_lon,
+    #             self.max_lon,
+    #             temporal_resolution="hour",
+    #             spatial_resolution=self.spatial_resolution,
+    #             aggregation=self.aggregation,
+    #             metadata=self.metadata.f_path,
+    #         )
+    #         ds_hour.append(get_raster_hour.execute())
 
-        return xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="time").max(dim="time")
+    #     return xr.concat(ds_year + ds_month + ds_day + ds_hour, dim="time").max(dim="time")
 
-    def _get_min_heatmap(self):
+    # def _get_min_heatmap(self):
         year_range, month_range, day_range, hour_range = get_whole_ranges_between(
             self.start_datetime, self.end_datetime
         )

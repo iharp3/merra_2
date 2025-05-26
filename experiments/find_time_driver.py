@@ -4,6 +4,7 @@ Edited from repo: https://github.com/iharp3/experiment-kit/blob/main/round2/driv
     
 Calls Polaris query executors to run requested queries. Records execution time.
 
+Outline:    
 '''
 
 
@@ -35,10 +36,15 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
             spatial_resolution=s,
             temporal_resolution=t,
             aggregation=q["aggregation"],
+            time_series_aggregation_method=q["aggregation"],      # FOR FILTER VALUE
+            filter_predicate=q["filter_predicate"],               # FOR FILTER VALUE
+            filter_value=q["filter_value"],                       # FOR FILTER VALUE
             )
-
+            
             try:
-                tr = qe.execute()
+                t0 = time.time()
+                qe.execute()
+                tr = time.time() - t0
             except Exception as e:
                 print(f"\nt: {t}\ts: {s}")
                 print(e)
@@ -55,7 +61,7 @@ def experiment_executor(cur_exp, t_res, s_res, df_query):
                                         "ta": ta,
                                         "total_time": tr + ta,
                                         "percent_area": 100,
-                                        "filter_value": None,
+                                        "filter_value": q["filter_value"],
                                         "time_span":5,
                                         })
                 print("======================\n")
@@ -69,21 +75,20 @@ if __name__ == "__main__":
     main_dir = "/home/uribe055/merra_2/experiments"
     sys.path.append(os.path.join(main_dir, "executors_find_time"))
 
-    #### For changing resolutions exp (FIGURE 5)#####
-    cur_exp = "GR"
-    t_resolutions = ["hour", "hour", "hour", "day", "day", "day", "year", "year", "year", "month", "month"]
-    # s_resolutions = [0.25, 0.5, 1,0.25, 0.5, 1,0.25, 0.5, 1,0.5, 1]
-    s_resolutions = [0, 1, 2, 0, 1, 2, 0, 1, 2, 1,2]
-    filename = "changing_resolutions.csv"
+    #### For find time exp (FIGURE 8) #####
+    cur_exp = "FT"
+    t_resolutions = ["hour", "hour", "month", "year", "year" ]
+    s_resolutions = [0, 2, 1, 0, 2]
+    filename = "find_time.csv"
     outfilename = "results_" + filename
 
 
     ##### MAIN #####
     results_list = experiment_executor(cur_exp=cur_exp,
-                                    t_res=t_resolutions,
-                                    s_res=s_resolutions,
-                                    df_query=pd.read_csv(os.path.join(main_dir, "queries", filename)),
-                                    )
+                                        t_res=t_resolutions,
+                                        s_res=s_resolutions,
+                                        df_query=pd.read_csv(os.path.join(main_dir, "queries", filename)),
+                                        )
 
     results_df = pd.DataFrame(results_list)
     out_file = os.path.join(main_dir, "results", outfilename)

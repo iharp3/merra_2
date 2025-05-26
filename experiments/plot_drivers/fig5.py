@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/home/uribe055/merra_2/experiments/results_all/" + "fig5_avg.csv"
+csv_file_path = "/home/uribe055/merra_2/experiments/results/" + "results_changing_resolutions.csv"
 df = pd.read_csv(csv_file_path)
 
 cur_plot = "t_res"
@@ -92,7 +92,7 @@ for plot_value, position  in zip(unique_plots, legend_position):
     
     # test
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/merra_2/experiments/plots/fig5_{plot_value}.png")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/merra_2/experiments/plot_drivers/plots/fig5_{plot_value}.png")  # Save the plot to a file
     plt.close(fig)
 
     # final

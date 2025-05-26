@@ -1,5 +1,6 @@
 '''
 Copied from github repo: https://github.com/iharp3/experiment-kit/blob/main/round2/executors/proposed/metadata.py
+    Accessed May 2025
 '''
 
 import numpy as np

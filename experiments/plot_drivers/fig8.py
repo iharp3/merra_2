@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 
 # Load the CSV file
-csv_file_path = "/home/uribe055/merra_2/experiments/results_all/" + "fig8.csv"
+csv_file_path = "/home/uribe055/merra_2/experiments/results/" + "results_find_time.csv"
 df = pd.read_csv(csv_file_path)
 
 x = "filter_value"
@@ -19,7 +19,8 @@ y = "total_time"
 # unique_plots = ["025_H",  "05_M", "1_Y"]
 # cur_plot = [[0.25, "hour"], [0.5, "month"], [1, "year"]]
 unique_plots = ["1_H",  "05_M", "025_Y"]
-cur_plot = [[1, "hour"], [0.5, "month"], [0.25, "year"]]
+# cur_plot = [[1, "hour"], [0.5, "month"], [0.25, "year"]]
+cur_plot = [[2, "hour"], [1, "month"], [0, "year"]]
 
 
 marker_size = 25
@@ -27,8 +28,8 @@ m_fill="none"
 font_size = 30
 tick_font_size = 30
 tick_size = 30
-tick_list = [205, 240, 275, 310]
-tick_labels = [205, 240, 275, 310]
+tick_list = [-0.0005, 0, 0.0005, 0.05, 0.5, 1.5, 2.5, 4.5, 5.5, 6.5]
+tick_labels = [-0.0005, 0, 0.0005, 0.05, 0.5, 1.5, 2.5, 4.5, 5.5, 6.5]
 line_width = 4
 above = "bottom"
 below = "top"
@@ -88,7 +89,7 @@ for plot_value, vals, position in zip(unique_plots, cur_plot, legend_position): 
     
     # test
     plt.tight_layout()
-    plt.savefig(f"/home/uribe055/merra_2/experiments/plots/fig8_{plot_value}.png")  # Save the plot to a file
+    plt.savefig(f"/home/uribe055/merra_2/experiments/plot_drivers/plots/fig8_{plot_value}.png")  # Save the plot to a file
     plt.close(fig)
 
     # # final
