@@ -175,3 +175,14 @@ Given these statistics, we choose the following filter values:
 9. 4.5
 10. 5.5
 11. 6.5
+
+### NOTES
+
+* Rerun find time with highest spatial resolution
+* Replot the plots
+* Code that finds average of the values to fill in table:
+
+                Execution time	get variable	find time	heatmap
+                3-hour, 0.5x0.625			
+                day, 1 x 1.25			
+                year, 2 x 2.5			
