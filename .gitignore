@@ -4,6 +4,7 @@
 # intermediate results
 results/
 plots/
+plots_individual_results/
 test/
 # executors_find_time/
 results_using_M_executors
