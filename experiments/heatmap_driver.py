@@ -75,10 +75,12 @@ if __name__ == "__main__":
 
     ##### For heatmap exp (FIGURE 7) ####
     cur_exp = "HE"
-    t_resolutions = ["hour", "hour", "month", "year", "year"]
-    s_resolutions = [0, 1, 0, 0, 1]
+    # t_resolutions = ["hour", "hour", "month", "year", "year"]
+    # s_resolutions = [0, 1, 0, 0, 1]
+    t_resolutions = ["day"]
+    s_resolutions = [1]
     filename = "heatmap.csv"
-    outfilename = "results_" + filename
+    outfilename = "day_1_results_" + filename
 
     ##### MAIN #####
     results_list = experiment_executor(cur_exp=cur_exp,

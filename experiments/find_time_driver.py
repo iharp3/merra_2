@@ -77,10 +77,12 @@ if __name__ == "__main__":
 
     #### For find time exp (FIGURE 8) #####
     cur_exp = "FT"
-    t_resolutions = ["hour", "hour", "month", "year", "year" ]
-    s_resolutions = [0, 2, 1, 0, 2]
+    # t_resolutions = ["hour", "hour", "month", "year", "year" ]
+    # s_resolutions = [0, 2, 1, 0, 2]
+    t_resolutions = ["day", "month"]
+    s_resolutions = [1, 1]
     filename = "find_time.csv"
-    outfilename = "results_" + filename
+    outfilename = "extra_results_" + filename
 
 
     ##### MAIN #####

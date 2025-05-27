@@ -182,7 +182,11 @@ Given these statistics, we choose the following filter values:
 * Replot the plots
 * Code that finds average of the values to fill in table:
 
-                Execution time	get variable	find time	heatmap
-                3-hour, 0.5x0.625			
-                day, 1 x 1.25			
-                year, 2 x 2.5			
+| Execution time    | get variable  | heatmap      | find time     |
+|-------------------|---------------|--------------|---------------|
+| 3-hour, 0.5x0.625 |   3.205153263 |  3.232050478 |   5.092864084 |
+| day, 1 x 1.25     | 0.08756367366 |  2.139978329 | 0.07778772513 |
+| month, 1 x 1.25   | 0.02431618445 |  2.232229054 | 0.03098197381 |
+| year, 2 x 2.5     |  0.0243877317 | 0.6551595926 | 0.03032958508 |
+
+Code: `merra_2/experiments/plot_drivers/get_avg_runtime.py`
