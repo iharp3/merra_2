@@ -88,29 +88,29 @@ The code for this is in `../merra_2/download/performance.py`
 
 Files in github repository: `experiment-kit/round2`
 
-* Figure 5: Impact of Changing Spatial and Temporal Resolutions
-        * Queries: `../tests/5c.csv`
-        * Driver: `driver.py`
-        * Vanilla/TDB/PolarisERA5 results: `../results/5c_all.csv`
-        * Plot code: `../figs/code/5cplot.py`
+#### Figure 5: Impact of Changing Spatial and Temporal Resolutions
+* Queries: `../tests/5c.csv`
+* Driver: `driver.py`
+* Vanilla/TDB/PolarisERA5 results: `../results/5c_all.csv`
+* Plot code: `../figs/code/5cplot.py`
 
-* Figure 6: Impact of Result Size
-        * Queries: `../tests/5a.csv`
-        * Driver: `driver5a.py`
-        * Vanilla/TDB/PolarisERA5 results: `../results/5a_all.csv`
-        * Plot code: `../figs/code/5aplot.py`
+#### Figure 6: Impact of Result Size
+* Queries: `../tests/5a.csv`
+* Driver: `driver5a.py`
+* Vanilla/TDB/PolarisERA5 results: `../results/5a_all.csv`
+* Plot code: `../figs/code/5aplot.py`
 
-* Figure 7: Heatmap Query Performance
-        * Queries: `../tests/hmft.csv`
-        * Driver: `driverhmft.py`
-        * Vanilla/TDB/PolarisERA5 results: *heatmap_all.csv*
-        * Plot code: `../figs/code/hmplot.py`
+#### Figure 7: Heatmap Query Performance
+* Queries: `../tests/hmft.csv`
+* Driver: `driverhmft.py`
+* Vanilla/TDB/PolarisERA5 results: *heatmap_all.csv*
+* Plot code: `../figs/code/hmplot.py`
 
-* Figure 8: Find Time Query Performance
-        * Queries: `../tests/fv_new.csv`
-        * Driver: `driverfv.py`
-        * Vanilla/TDB/PolarisERA5 results: `../results/greenland.csv`
-        * Plot code: `../figs/code/fvplot.py`
+#### Figure 8: Find Time Query Performance
+* Queries: `../tests/fv_new.csv`
+* Driver: `driverfv.py`
+* Vanilla/TDB/PolarisERA5 results: `../results/greenland.csv`
+* Plot code: `../figs/code/fvplot.py`
 
 ### Current experiments
 - DONE: For queries: change time ranges, region must be within Greenland.
